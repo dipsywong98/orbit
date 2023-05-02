@@ -5,6 +5,7 @@ name: test
 on:
   push:
     branches: [ "master" ]
+    tags: ["**"]
   pull_request:
     branches: [ "master" ]
 
@@ -12,7 +13,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -57,3 +58,14 @@ jobs:
       #     cargo pants
       - name: Test
         run: cargo test
+
+      - name: Compile Release
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        run: cargo build --release
+
+      - name: Push release to GitHub
+        uses: ncipollo/release-action@v1
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        with:
+          artifacts: "target/release/choo-choo"
+          token: ${{ secrets.GITHUB_TOKEN }}
