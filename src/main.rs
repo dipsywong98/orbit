@@ -62,7 +62,7 @@ pub fn create_app() -> App<
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(create_app)
-        .bind(("127.0.0.1", 8080))?
+        .bind(("127.0.0.1", 8192))?
         .run()
         .await
 }

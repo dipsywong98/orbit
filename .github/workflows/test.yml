@@ -72,3 +72,25 @@ jobs:
         with:
           artifacts: "target/release/orbit"
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [rust-release]
+    steps:
+      - run: |
+          REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
+          echo $REPOSITORY_NAME
+          CODE=`curl -s -o /tmp/out -w "%{http_code}" --location '${{ secrets.DEPLOY_URL }}' \
+          --header 'Content-Type: application/json' \
+          --data '{
+              "playbook": "${{ secrets.DEPLOY_PLAYBOOK }}",
+              "token": "${{ secrets.DEPLOY_TOKEN }}"
+          }'`
+          echo "code=$CODE"
+          cat /tmp/out
+          if [ $CODE=200 ]; then
+            echo "good"
+          else
+            echo "no good"
+            exit 1
+          fi
