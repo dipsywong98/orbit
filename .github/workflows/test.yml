@@ -75,7 +75,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [rust-release]
+    needs: [test]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - run: |
           REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')
