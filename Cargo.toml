@@ -7,13 +7,18 @@ edition = "2021"
 
 [dependencies]
 actix = "0.13.0"
+actix-files = "0.6.2"
 actix-http = "3.3.1"
 actix-web = "4.3.1"
 actix-web-actors = "4.2.0"
 config = "0.13.3"
+env_logger = "0.10.0"
 futures-util = "0.3.28"
+log = "0.4.17"
+rand = "0.8.5"
 redis = "0.23.0"
 serde = "1.0.160"
+
 
 [dev-dependencies]
 actix-test = "0.1.1"
